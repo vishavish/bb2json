@@ -44,14 +44,14 @@ fn main() {
 			return
 		}
 
-		if hit_title(line) {
+		if line.contains('<H3') && !line.contains('PERSONAL_TOOLBAR_FOLDER') {
 			_, list_title = get_line_info(line, true) or { return }
 			temp.name = list_title
 			has_title = true
 			continue
 		}
 
-		if hit_end(line) {
+		if line.contains('</DL><p>') {
 			if temp.items != [] {
 				bookmarks << temp
 			}
@@ -80,19 +80,6 @@ fn main() {
 		eprintln('Failed to write file: ${err}')
 		return
 	}
-}
-
-fn show_usage() {
-}
-
-@[inline]
-fn hit_title(line string) bool {
-	return line.contains('<H3') && !line.contains('PERSONAL_TOOLBAR_FOLDER')
-}
-
-@[inline]
-fn hit_end(line string) bool {
-	return line.contains('</DL><p>')
 }
 
 fn get_line_info(line string, for_title bool) !(string, string) {
